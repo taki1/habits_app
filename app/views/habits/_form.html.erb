@@ -1,0 +1,374 @@
+<%= form_for(@habit) do |f| %>
+  <% if @habit.errors.any? %>
+    <div id="error_explanation">
+<!--
+      <h2><%= pluralize(@habit.errors.count, "error") %> prohibited this habit from being saved:</h2>
+-->
+      <ul>
+      <% @habit.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<table class="edit_list">
+<!--
+  <thead>
+    <tr>
+      <th width='8%'></th>
+      <th width='92%'></th>
+    </tr>
+  </thead>
+
+  <tbody>
+-->
+    <tr>
+<th  width='8%'>
+    <%= f.label :目標 ,:class => 'title' %>
+</th  width='92%'>
+<td>
+    <%= f.text_field :target, :maxlength => 255, :class => 'form-control text_field_tar' %>
+</td>
+    </tr>
+    <tr>
+<th>
+    <%= f.label :期間 ,:class => 'title' %>
+</th>
+<td>
+   <%= f.text_field :start_at, value:f.object.start_at.try(:strftime,'%Y/%m/%d'), data: { :date_format => 'YYYY/MM/DD' }, "title" => '開始日', :maxlength => 10, :class => 'form-control text_field_cal date-picker', placeholder: 'YYYY/MM/DD' %>
+    <%= f.label :〜 %>
+    <%= f.text_field :end_at, value:f.object.end_at.try(:strftime,'%Y/%m/%d'), data: { :date_format => 'YYYY/MM/DD' }, "title" => '終了日', :maxlength => 10, :class => 'form-control text_field_cal date-picker', placeholder: 'YYYY/MM/DD' %>
+ </td>
+    </tr>
+    <tr>
+<th>
+      <%= f.label :対象曜日 ,:class => 'title' %>
+</th>
+<td>
+      <%= f.label :月 ,:class => 'title'  %>
+      <%= check_box_tag 'monday', f.object.monday, f.object.monday, {"data-id" => f.object.id, "day" => 'weekday', :class => 'check_box_tag' } %>
+      <%= f.label :火 ,:class => 'title'  %>
+      <%= check_box_tag 'tuesday', '', f.object.tuesday, {"data-id" => f.object.id, "day" => 'weekday', :class => 'check_box_tag' } %>
+      <%= f.label :水 ,:class => 'title'  %>
+      <%= check_box_tag 'wednesday', '', f.object.wednesday, {"data-id" => f.object.id, "day" => 'weekday', :class => 'check_box_tag' } %>
+      <%= f.label :木 ,:class => 'title'  %>
+      <%= check_box_tag 'thursday', '', f.object.thursday, {"data-id" => f.object.id, "day" => 'weekday', :class => 'check_box_tag' } %>
+      <%= f.label :金 ,:class => 'title'  %>
+      <%= check_box_tag 'friday', '', f.object.friday, {"data-id" => f.object.id, "day" => 'weekday', :class => 'check_box_tag' } %>
+      <%= f.label :土 ,:class => 'title'  %>
+      <%= check_box_tag 'saturday', f.object.saturday, f.object.saturday, {"data-id" => f.object.id, "day" => 'holiday', :class =>'check_box_tag'} %>
+      <%= f.label :日 ,:class => 'title'  %>
+      <%= check_box_tag 'sunday', f.object.sunday, f.object.sunday, {"data-id" => f.object.id, "day" => 'holiday', :class => 'check_box_tag' } %>
+      <%= f.label :月〜金 ,:class => 'title'  %>
+      <%= check_box_tag 'weekday', '', '',{:class => 'check_box_tag' } %>
+      <%= f.label :土・日 ,:class => 'title'  %>
+      <%= check_box_tag 'holiday', '', '',{:class => 'check_box_tag' } %>
+      <%= f.label :毎日 ,:class => 'title'  %>
+      <%= check_box_tag 'evreyday', '', '',{:class => 'check_box_tag' } %>
+</td>
+    </tr>
+<!--
+  </tbody>
+-->
+</table>
+<% if false %>
+<!--
+  <div class="field">
+    <%= f.label :user_id %>
+    <%= f.number_field :user_id %>
+  </div>
+-->
+  <div class="field">
+    <%= f.label :目標 %>
+    <%= f.text_field :target, :maxlength => 255, :class => 'form-control text_field' %>
+  </div>
+ <div class="field">
+    <%= f.label :期間 %>
+    <%= f.text_field :start_at, value:f.object.start_at.try(:strftime,'%Y/%m/%d'), data: { :date_format => 'YYYY/MM/DD' }, "title" => '開始日', :maxlength => 10, :class => 'form-control text_field', placeholder: 'YYYY/MM/DD' %>
+    <%= f.label :〜 %>
+    <%= f.text_field :end_at, value:f.object.end_at.try(:strftime,'%Y/%m/%d'), data: { :date_format => 'YYYY/MM/DD' }, "title" => '終了日', :maxlength => 10, :class => 'form-control text_field_cal', placeholder: 'YYYY/MM/DD' %>
+  </div>
+<% end %>
+  <div class="field">
+<% if false %>
+      <%= f.label :対象曜日 %>
+      <%= f.label :日 %>
+      <%= check_box_tag 'sunday', f.object.sunday, f.object.sunday, {"data-id" => f.object.id, :class => 'check_box_tag' } %>
+      <%= f.label :月 %>
+      <%= check_box_tag 'monday', f.object.monday, f.object.monday, {"data-id" => f.object.id, :class => 'check_box_tag' } %>
+      <%= f.label :火 %>
+      <%= check_box_tag 'tuesday', '', f.object.tuesday, {"data-id" => f.object.id, :class => 'check_box_tag' } %>
+      <%= f.label :水 %>
+      <%= check_box_tag 'wednesday', '', f.object.wednesday, {"data-id" => f.object.id, :class => 'check_box_tag' } %>
+      <%= f.label :木 %>
+      <%= check_box_tag 'thursday', '', f.object.thursday, {"data-id" => f.object.id, :class => 'check_box_tag' } %>
+      <%= f.label :金 %>
+      <%= check_box_tag 'friday', '', f.object.friday, {"data-id" => f.object.id, :class => 'check_box_tag' } %>
+      <%= f.label :土 %>
+      <%= check_box_tag 'saturday', f.object.saturday, f.object.saturday, {"data-id" => f.object.id, :class =>'check_box_tag'} %>
+      <%= f.label :月〜金 %>
+      <%= check_box_tag 'weekday', '', '',{:class => 'check_box_tag' } %>
+      <%= f.label :土・日 %>
+      <%= check_box_tag 'holiday', '', '',{:class => 'check_box_tag' } %>
+      <%= f.label :毎日 %>
+      <%= check_box_tag 'evreyday', '', '',{:class => 'check_box_tag' } %>
+      <%= hidden_field_tag :dayCnt %>
+<!--<%= check_box_tag "week[0]", "1" %>-->
+<!--<%= check_box_tag "week[1]", "2" %>-->
+<% end %>
+<% if false %>
+      <%= f.label :日 %>
+      <%= f.check_box :sunday, {:class => 'check_box' }, true, false %>
+      <%= f.label :月 %>
+      <%= f.check_box :monday, {:class => 'check_box' }, true, false %>
+      <%= f.label :火 %>
+      <%= f.check_box :tuesday, {:class => 'check_box' }, true, false %>
+      <%= f.label :水 %>
+      <%= f.check_box :wednesday, {:class => 'check_box' }, true, false %>
+      <%= f.label :木 %>
+      <%= f.check_box :thursday, {:class => 'check_box' }, true, false %>
+      <%= f.label :金 %>
+      <%= f.check_box :friday, {:class => 'check_box' }, true, false %>
+      <%= f.label :土 %>
+      <%= f.check_box :saturday, {:class => 'check_box' }, true, false %>
+      <%= f.label :月〜金 %>
+      <%= f.check_box 'weekday', 'flag', {:class => 'check_box' }, true, false %>
+      <%= f.label :土・日 %>
+      <%= f.check_box 'holiday', 'flag', {:class => 'check_box' }, true, false %>
+      <%= f.label :毎日 %>
+      <%= f.check_box 'evreyday', 'flag', {:class => 'check_box' }, true, false %>
+<% end %>
+      <!--<%= check_box 'monday', 'flag', {:class => 'check_box' }, true, false %>-->
+  </div>
+
+
+<% if false %>
+  <div class="field">
+    <%= f.label :start_at %>
+    <!--<%= f.date_select :start_at %>-->
+    <!--<%= f.text_field :start_at, data: { :date_format => 'YYYY/MM/DD' }, :class => 'form-control datetimepicker', placeholder: Time.now.months_since(2).strftime('%Y/%m/%d') %>-->
+    <%= f.text_field :start_at, value:f.object.start_at.try(:strftime,'%Y/%m/%d'), data: { :date_format => 'YYYY/MM/DD' }, :class => 'form-control date-picker', placeholder: Time.now.strftime('%Y/%m/%d') %>
+  </div> 
+  <div class="field">
+    <%= f.label :end_at %><br>
+    <!--<%= f.date_select :end_at %>-->
+      <%= f.text_field :end_at, value:f.object.end_at.try(:strftime,'%Y/%m/%d'), data: { :date_format => 'YYYY/MM/DD' }, :class => 'form-control date-picker', placeholder: Time.now.next_month.yesterday.strftime('%Y/%m/%d') %>
+  </div>
+<% end %>
+
+  <div class="center">
+    <%= f.submit :class => "button_submit" %>
+<% end %>
+  <%= button_to '一覧に戻る', habits_path, :method => :get, :class => "button_back" %>
+  <% if !@habit[:id].nil? %>
+    <%= button_to '詳細', @habit, :method => :get, :class => "button_show button_lg" %>
+  <% end %>
+  </div>
+
+<script>
+$(function(){
+/*
+  $("input[type=checkbox]").click(function(){ 
+    alert(this.id)
+  });
+*/
+  $("input[name=commit]").click(function(){ 
+    return true
+    var target = document.getElementById('habit_target').value
+    if(target.length == 0){
+      alert('目標を入力してください')
+      return false
+    }
+    var start = document.getElementById('habit_start_at').value
+    if(!DateCheck(start)){
+      alert('開始日を正しい形式で入力してください')
+      return false
+    }
+    var end = document.getElementById('habit_end_at').value
+    if(!DateCheck(end)){
+      alert('終了日を正しい形式で入力してください')
+      return false
+    }
+    //alert(this.id)
+    //document.getElementById('habit_start_at').value
+    //return false
+  });
+  $("input[id=habit_start_at], input[id=habit_end_at]").blur(function(){
+   //$("input[type=checkbox]").each(){ 
+   // alert(this.id)
+   //}
+$('[day="weekday"]').each(function(){
+    //alert($(this).prop('id') + $(this).prop('checked'));
+    //if ($(this).val() === days[i]) {
+      //以下のattrを使った書き方は非推奨
+      //$(this).attr('checked', 'checked');
+      //$(this).prop('checked', true);
+    //}
+  });
+    var val = document.getElementById(this.id).value
+    if(val.length == 0) 
+      return
+
+//    if(val.length != 10) {
+    if(!DateCheck(val)){
+      var title = document.getElementById(this.id).title
+      alert(title + 'を正しい形式で入力してください')
+      return
+    }
+//    if(val.length != 10) {
+//      alert('期間を正しい形式で入力してください')
+//      return
+//    }
+  });
+  $("input[id=weekday]").click(function(){
+    check_weekday()
+    set_everyday()
+  });
+  $("input[id=monday], input[id=tuesday], input[id=wednesday], input[id=thursday], input[id=friday]").click(function(){
+    set_weekday()
+//    var wflg = set_weekday()
+//    var hflg = document.getElementById('holiday').checked
+//    document.getElementById('evreyday').checked = wflg && hflg
+    set_everyday()
+  });
+  $("input[id=holiday]").click(function(){
+    check_holiday()
+    set_everyday()
+  });
+  $("input[id=sunday], input[id=saturday]").click(function(){
+    set_holiday()
+//    var wflg = document.getElementById('weekday').checked
+//    var hflg = set_holiday()
+//    document.getElementById('evreyday').checked = wflg && hflg
+    set_everyday()
+  });
+  $("input[id=evreyday]").click(function(){
+    var check = document.getElementById('evreyday').checked
+    document.getElementById('holiday').checked = check
+    document.getElementById('weekday').checked = check
+    check_weekday()
+    check_holiday()
+  });
+  $(function(){
+    var wflg = set_weekday()
+    var hflg = set_holiday()
+    document.getElementById('evreyday').checked = wflg && hflg
+  });
+  function check_holiday(){
+    var check = document.getElementById('holiday').checked
+    $('[day="holiday"]').each(function(){
+      $(this).prop('checked', check);
+    });
+//    document.getElementById('sunday').checked = check
+//    document.getElementById('saturday').checked = check
+  }
+  function set_holiday(){
+    return document.getElementById('holiday').checked 
+    =  (document.getElementById('sunday').checked
+    && document.getElementById('saturday').checked)
+  }
+  function check_weekday(){
+    var check = document.getElementById('weekday').checked
+    $('[day="weekday"]').each(function(){
+      $(this).prop('checked', check);
+    });
+/*
+    document.getElementById('monday').checked = check
+    document.getElementById('tuesday').checked = check
+    document.getElementById('wednesday').checked = check
+    document.getElementById('thursday').checked = check
+    document.getElementById('friday').checked = check
+*/
+  }
+  function set_weekday(){
+    return document.getElementById('weekday').checked 
+    =  (document.getElementById('monday').checked
+    && document.getElementById('tuesday').checked
+    && document.getElementById('wednesday').checked
+    && document.getElementById('thursday').checked
+    && document.getElementById('friday').checked)
+  }
+  function set_everyday(){
+    var wflg = document.getElementById('weekday').checked 
+    var hflg = document.getElementById('holiday').checked
+    document.getElementById('evreyday').checked = wflg && hflg
+  }
+function DateCheck(date){
+// "-","/"で区切られているとき
+    hiduke = date.replace("-","/")
+ //   if(date.length != 10) {
+ //       alert("日付の形式が正しくない")
+ //       return false
+ //   }
+/*
+    if (! hiduke.match(/^\d{2,4}\/\d{1,2}\/\d{1,2}$/)
+    &&  ! hiduke.match(/^\d\d\d\d\d\d\d\d$/)){
+        alert("日付の形式が正しくない")
+        return false
+    }
+*/
+    if (! date.match(/^\d{4}\/\d{2}\/\d{2}$/)){
+        //alert("日付の形式が正しくない")
+        return false
+    }
+//配列に年月日を格納する
+    a = new Array();
+    a = hiduke.split("/")
+/*
+    if (hiduke.match(/^\d{2,4}\/\d{1,2}\/\d{1,2}$/)){
+        a = hiduke.split("/")
+ a   }else{
+        a[0] = date.substring(0,4)
+        a[1] = date.substring(4,6)
+        a[2] = date.substring(6,8)
+    }
+ */
+    nd = new Date();
+    yy = nd.getFullYear()
+    mm = nd.getMonth()*1 + 1
+    dd = nd.getDate()
+
+//年は現在＋－１年を許容範囲にしている
+    if (a[0] < (yy - 1) || a[0] > (yy*1 + 1)){
+//        alert("年が正しくない")
+        return false
+    }
+//月のチェック
+    if (a[1]*1 > 12 || a[1]*1 < 1){
+//        alert("月が正しくない")
+        return false
+    }
+//日のチェック
+//３１日までのとき
+    if (a[1]*1 == 1 || a[1]*1 == 3 || a[1]*1 == 5 || a[1]*1 == 7 || a[1]*1 == 8 || a[1]*1 == 10 || a[1]*1 == 12){
+        if (a[2]*1 > 31 || a[2]*1 < 1){
+//            alert("日が正しくない")
+            return false
+        }
+    }else{
+//2月のチェック
+        if (a[1]*1 == 2){
+            if (a[0] % 4 == 0){
+                if (a[2]*1 > 29 || a[2]*1 < 1){
+//                    alert("日が正しくない")
+                    return false
+                }
+            }else{
+                if (a[2]*1 > 28 || a[2]*1 < 1){
+//                    alert("日が正しくない")
+                    return false
+                }
+            }
+        }else{
+//３０日が末日のチェック
+            if (a[2]*1 > 30 || a[2]*1 < 1){
+//                alert("日が正しくない")
+                return false
+            }
+        }
+    }
+    return true
+}
+});
+</script>
+

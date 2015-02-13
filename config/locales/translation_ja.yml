@@ -1,0 +1,40 @@
+ja:
+  activerecord:
+    models:
+      habit: habit  #g
+      micropost: micropost  #g
+      project: project  #g
+      task: task  #g
+      user: user  #g
+
+    attributes:
+      habit:
+#        end_at: end_at  #g
+#        start_at: start_at  #g
+#        target: target  #g
+        end_at: 終了日  #g
+        start_at: 開始日  #g
+        target: 目標  #g
+        user: :activerecord.models.user  #g
+
+      micropost:
+        content: content  #g
+        user: :activerecord.models.user  #g
+
+      project:
+        tasks: tasks  #g
+        title: title  #g
+
+      task:
+        done: done  #g
+        project: :activerecord.models.project  #g
+        title: title  #g
+
+      user:
+        admin: admin  #g
+        email: email  #g
+        habits: habits  #g
+        microposts: microposts  #g
+        name: name  #g
+        password_digest: password_digest  #g
+        remember_token: remember_token  #g

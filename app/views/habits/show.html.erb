@@ -1,0 +1,234 @@
+<p id="notice"><%= notice %></p>
+<h1>目標:<%= @habit.target %></h1>
+<h2>期間:<%= @habit.start_at.strftime('%Y/%m/%d') %> 〜 <%= @habit.end_at.strftime('%Y/%m/%d') %></h2>
+<h2>対象曜日:
+	<% if @habit.monday %><%= '月 ' %><% end %>
+	<% if @habit.tuesday %><%= '火 ' %><% end %>
+	<% if @habit.wednesday %><%= '水 ' %><% end %>
+	<% if @habit.thursday %><%= '木 ' %><% end %>
+	<% if @habit.friday %><%= '金 ' %><% end %>
+	<% if @habit.saturday %><%= '土' %><% end %>
+  <% if @habit.sunday %><%= '日 ' %><% end %>
+</h2>
+
+<!--
+<h2><%= @month.strftime('%Y/%m/%d')  %></h2>
+<div id="calendar"></div>
+-->
+<% if false %>
+ <%= button_to '＜', "", :id => "last_month" , :method => :get, :class => "button_lg", :name => @month.next_month.strftime('%Y%m') %>
+
+  <%= button_to '＞', {controller:"habits", action:"show",id:@habit.id, month:@month.next_month.strftime('%Y%m')}, :id => "next_month" , :method => :get, :class => "button_lg" %>
+<%= link_to('先月','#', :method => :get, :data=> @month.last_month) -%>
+<% end %>
+
+<div style="text-align: center">
+<% if @month.last_month.beginning_of_month.between?(@habit.start_at,@habit.end_at) or @month.last_month.end_of_month.between?(@habit.start_at,@habit.end_at) %>
+<%= link_to "＜", {controller:"habits", action:"show",id:@habit.id, month:@month.last_month.beginning_of_month.strftime('%Y%m')}, :method => :get, :class => "link_month" %>
+<% else %>
+<%= link_to_unless_current("＜", {:controller => "habits", :action => "show"}) do
+    link_to("＜", {:controller => "habits", :action => "show"},  :class => "link_month disabled")
+  end %>
+<% end %>
+<%= label :month, @month.strftime('%Y/%m'), '', :class => 'this_month' %>
+<% if @month.next_month.beginning_of_month.between?(@habit.start_at,@habit.end_at) or @month.next_month.end_of_month.between?(@habit.start_at,@habit.end_at) %>
+<%= link_to "＞", {controller:"habits", action:"show",id:@habit.id, month:@month.next_month.strftime('%Y%m')}, :method => :get, :class => "link_month"  %>
+<% else %>
+<%= link_to_unless_current("＞", {:controller => "habits", :action => "show"}) do
+    link_to("＞", {:controller => "habits", :action => "show"},  :class => "link_month disabled")
+  end %>
+<% end %>
+
+
+<%#= label :page, "＞", '', :class => 'disabled_month' %>
+<%#= link_to_unless_current("＞", {:controller => "habits", :action => "show"}, :class => "disabled_month")  %>
+
+<%#= link_to_unless_current("＞", {:controller => "habits", :action => "show"},  :class => "disabled_month") do
+    link_to("＞", {:controller => "habits", :action => "show"},  :class => "disabled_month disabled")
+  end
+%>
+
+
+
+</div>
+<br>
+<table  class="index_list" width="100%">
+  <thead>
+    <tr text-align="center" valign="middle">
+      <!--<th>User</th>-->
+      <th>月</th>
+      <th>火</th>
+      <th>水</th>
+      <th>木</th>
+      <th>金</th>
+      <th>土</th>
+      <th>日</th>
+    </tr>
+  </thead>
+ <tbody>
+<% date = 0 %>
+<% if false %>
+<% youbi = 7 %>
+<% date = num + (num * (row - 1)) %>
+<% date = youbi + (num * (row - 1)) %>
+<% end %>
+
+<% for row in 1..6 do %>
+<% if date >= @month.end_of_month.day %>
+<% break %>
+<% end %>
+
+      <tr>
+<% for num in 1..7 do %>
+  <% if date.between?(1,@month.end_of_month.day-1) or (num == @youbi and date == 0) %>
+    <% date += 1 %>
+    <% today = (@month.beginning_of_month+(date-1).day).strftime('%Y-%m-%d') %>
+    <% reslut = @habit.results.where("result_at like '%#{today}%'") %>
+    <% if reslut.count > 0  %>
+      <td id=<%= "td#{reslut[0].result_at.strftime('%Y-%m-%d')}" %> class=<%= @cal_class[reslut[0].done] %> >
+        <%= select_tag reslut[0].result_at.strftime('%Y-%m-%d'), options_for_select(@boxs, :selected => reslut[0].done), { class: @select_class[reslut[0].done] }  %>
+        <%= date %><br>
+    <% elsif @youbiFlg[num-1] and today >= @habit.start_at.beginning_of_day and today <= @habit.end_at.end_of_day %>
+      <td id=<%= "td#{today}" %> class="cal_com">
+        <%= select_tag today, options_for_select(@boxs, :selected => "0" ), { class: "select_result0" } %><%= date %>
+    <% elsif today < @habit.start_at.beginning_of_day or today > @habit.end_at.end_of_day %>
+      <td id=<%= "td#{today}" %> class="no_cal">
+        <%= select_tag today, options_for_select(@boxs, :selected => "0" ), { class: "select_disabled", disabled: true  } %><%= date %>
+    <% else %>
+      <td id=<%= "td#{today}" %> class="cal3">
+        <%= select_tag today, options_for_select(@boxs, :selected => "3" ), { class: "select_result3" } %>
+        <%= date %><br>
+    <% end %>
+  <% else %>
+    <td class="no_cal"><br>
+  <% end %>
+    </td>
+<% end %>
+      </tr>
+<% end %>
+
+  </tbody>
+</table>  
+  <div class="center">
+  <%= button_to '編集', edit_habit_path(@habit), :method => :get, :class => "button_edit button_lg" %>
+  <%= button_to '一覧に戻る', habits_path, :method => :get, :class => "button_back" %>
+  </div>
+
+<% if false %>
+    <% @habit.results.each do |result| %>
+      <tr>
+        <td><%= result.result_at.strftime('%Y/%m/%d') %></td>
+      </tr>
+      <tr>
+        <td>
+        <ul class="nav navbar-nav">
+            <li id="fat-menu" class="dropdown">
+              <a href="#" data-toggle="dropdown"><%= result.done %><span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><%= link_to " ", new_habit_path %></li>
+                <li class="divider"></li>
+                <li><%= link_to "○", current_user %></li>
+                <li class="divider"></li>
+                <li><%= link_to "×", edit_user_path(current_user) %></li>
+                <li class="divider"></li>
+                <li><%= link_to "−", signout_path %></li>
+              </ul>
+            </li>
+        </ul>
+<select id="year_select" name="y" style="width:100px;">
+                <option value="0"> </option>
+                <option value="1">○</option>
+                <option value="2">×</option>
+                <option value="3">−</option>
+</select>
+        </td>
+      </tr>
+    <% end %>
+
+
+<p>
+  <strong>User:</strong>
+  <%= @habit.user_id %>
+  <%= current_user.name %>
+</p>
+
+<p>
+  <strong>Target:</strong>
+  <%= @habit.target %>
+</p>
+
+<p>
+  <strong>Start at:</strong>
+  <%= @habit.start_at.strftime('%Y/%m/%d') %>
+</p>
+
+<p>
+  <strong>End at:</strong>
+  <%= @habit.end_at.strftime('%Y/%m/%d') %>
+</p>
+
+<%= link_to 'Edit', edit_habit_path(@habit) %> |
+<%= link_to 'Back', habits_path %>
+<% end %>
+
+<script>
+$(function(){
+  function next_month(date){
+  }
+  $("select").change(function() {
+    //alert("クリックしました");
+    //alert(this);
+    //alert(this.className);
+    var flg = false;
+    flg = $.ajax({
+      //url: "detail/",
+      type: "GET",
+      data: { month : this.name,
+              done: this.value,
+      },
+      success: function(data) {
+          //alert("success");
+          //window.location.reload(); 
+      },
+      error: function(data) {
+          alert("更新に失敗にしました．");
+      }
+    });
+    if (flg) {
+      var cal_class = ["","cal1","cal2","cal3"];
+      var select_class = ["select_result0","select_result1","select_result2","select_result3"];
+      this.className = select_class[this.value];
+      var elem = document.getElementById("td"+this.name);
+      elem.className = cal_class[this.value];
+    }
+  });
+/*
+$("#last_month").click(function() {
+    //alert("クリックしました");
+    alert(this.name);
+
+    $.ajax({
+            //url: "habits/",
+            type: "GET",
+            data: {month : this.name,
+                    //id: 2,
+                    //mode: 'hoge',
+                    //type: 'entry'
+                    },
+            //dataType: "html",
+            success: function(data) {
+                alert("success");
+            },
+            error: function(data) {
+                alert("errror");
+            }
+    });
+    return false;
+  });
+  $("input[name=next_month]").click(function(){ 
+alert("next_month");
+  });
+*/
+});
+
+</script>
